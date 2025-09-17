@@ -13,10 +13,10 @@ try:
     with connection.cursor() as cursor:
         # Retrieve all column names from the table
         cursor.execute("SHOW COLUMNS FROM Nashville_Housing;")
-        columns_info = cursor.fetchall()  # 获取所有列的信息
-        print("column:", columns_info)  # 打印列信息
-
-        columns = [row[0] for row in columns_info]  # 提取列名
+        columns_info = cursor.fetchall()  # get the info of all columns
+        print("column:", columns_info)  
+        
+        columns = [row[0] for row in columns_info]  # extract the column names
 
         # Generate and execute an update query for each column
         for col in columns:
