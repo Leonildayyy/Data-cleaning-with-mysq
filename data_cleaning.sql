@@ -9,7 +9,8 @@ UPDATE Nashville_Housing
 SET SaleDate = STR_TO_DATE(SaleDate, '%M %d, %Y');
 
 ###populate Property Address data 
-##同一个parcel id, property address应该一样，用join和isnull（）实现替换
+##For the same ParcelID, the PropertyAddress should be the same; 
+##use JOIN and ISNULL()/COALESCE() to replace missing values
 
 SELECT a.ParcelID,b.ParcelID,a.PropertyAddress,b.PropertyAddress,coalesce(a.PropertyAddress,b.PropertyAddress)
 FROM Nashville_Housing a
@@ -29,9 +30,10 @@ from Nashville_Housing;
 
 ###breaking out Address into Individual Columns (Address, City, State)
 
-select substr(PropertyAddress,1,instr(PropertyAddress,",") - 1) as PropertysplitAddress, ##从第一个字母到comma前的一个字母
+select substr(PropertyAddress,1,instr(PropertyAddress,",") - 1) as PropertysplitAddress, ##from the first character up to the character before the comma
 substr(PropertyAddress,instr(PropertyAddress,",") + 1) as PropertysplitCity 
-##从comma后的一个字母到这个string的最后一个字母，所以不需要加上len(PropertyAddress)做参数
+###from the character after the comma to the end of the string 
+###(no need to use LEN(PropertyAddress) as a parameter)
 from Nashville_Housing;
 
 ALTER TABLE Nashville_Housing
@@ -104,10 +106,10 @@ where row_num > 1
 order by PropertyAddress;
 
 ##delete the duplicated rows 
-##先用 CTE 或子查询标记需要删除的行。
+##use a CTE or subquery to mark the rows that need to be deleted.
 ##use a JOIN to connect the original table with the result of the CTE 
 with RowNumCTE as(
-select UniqueID,  -- 选择唯一标识列
+select UniqueID,  
 row_number() over(
 partition by ParcelID,
              PropertyAddress,
